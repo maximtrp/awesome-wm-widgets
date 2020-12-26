@@ -12,7 +12,6 @@ local battery_path = "/sys/class/power_supply/BAT0/"
 
 local function worker()
 
-    local get_battery_cmd = ''
     local font = 'Iosevka 12'
 
     local image_path_make = function(val, charging)
