@@ -9,10 +9,11 @@ local spawn = require("awful.spawn")
 local timer = require("gears.timer")
 local widget = {}
 
-local function worker()
+local function worker(user_args)
 
-    local get_wifi_cmd = 'iwconfig wlp3s0 | grep Quality | grep -Eo "[0-9]+/[0-9]+"'
-    local font = 'Iosevka 12'
+    local args = user_args or {}
+    local interface = args.interface or 'wlp3s0'
+    local get_wifi_cmd = 'iwconfig ' .. interface .. ' | grep Quality | grep -Eo "[0-9]+/[0-9]+"'
 
     local image_path_make = function(level)
         local path = os.getenv("HOME") .. "/.config/awesome/icons/network-wireless-disconnected.png"
@@ -21,7 +22,6 @@ local function worker()
         end
         return path
     end
-
 
     local image_path = image_path_make(0)
 
@@ -32,7 +32,6 @@ local function worker()
     }
 
     local wifi_text = wibox.widget.textbox()
-    wifi_text:set_font(font)
 
     local widget = wibox.widget {
         wifi_image,

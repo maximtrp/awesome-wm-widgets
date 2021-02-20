@@ -17,13 +17,12 @@ local get_brightness_cmd = GET_BRIGHTNESS_CMD
 local inc_brightness_cmd = INC_BRIGHTNESS_CMD
 local dec_brightness_cmd = DEC_BRIGHTNESS_CMD
 
-local font = 'Iosevka 12'
 local brightness_text = wibox.widget.textbox()
-brightness_text:set_font(font)
+brightness_text:set_font("Iosevka 12")
 
 local brightness_image = wibox.widget {
     image = os.getenv("HOME") .. '/.config/awesome/icons/brightness.png',
-    resize = false,
+    resize = true,
     widget = wibox.widget.imagebox
 }
 

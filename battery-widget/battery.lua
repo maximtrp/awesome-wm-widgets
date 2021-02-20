@@ -8,12 +8,13 @@ local wibox = require("wibox")
 local spawn = require("awful.spawn")
 local timer = require("gears.timer")
 local widget = {}
-local battery_path = "/sys/class/power_supply/BAT0/"
 
-local function worker()
+local function worker(user_args)
 
+    local args = user_args or {}
+    local battery_name = args.battery or "BAT0"
+    local battery_path = "/sys/class/power_supply/" .. battery_name
     local get_battery_cmd = ''
-    local font = 'Iosevka 12'
 
     local image_path_make = function(val, charging)
         local charge_status = ""
@@ -34,7 +35,6 @@ local function worker()
     }
 
     local battery_text = wibox.widget.textbox()
-    battery_text:set_font(font)
 
     local widget = wibox.widget {
         battery_image,
@@ -57,7 +57,7 @@ local function worker()
         call_now = true,
         autostart = true,
         callback = function()
-            spawn.easy_async_with_shell("echo $(cat " .. battery_path .. "status) $(cat " .. battery_path .. "capacity)", update_widget)
+            spawn.easy_async_with_shell("echo $(cat " .. battery_path .. "/status) $(cat " .. battery_path .. "/capacity)", update_widget)
         end
     }
 

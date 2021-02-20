@@ -8,7 +8,7 @@ local wibox = require("wibox")
 local spawn = require("awful.spawn")
 local button = require("awful.button")
 local util = require("awful.util")
-local get_volume_cmd = "amixer sget Master | grep Left: | awk '{print $5, $6}'"
+local get_volume_cmd = "/usr/bin/echo $(pamixer --get-volume) $(pamixer --get-mute)"
 
 local volume_text = wibox.widget.textbox()
 volume_text:set_font("Iosevka 12")
@@ -21,7 +21,7 @@ local volume_image = wibox.widget {
 
 local image_path_make = function(level, muted)
     local status = 'low'
-    if muted == 'off' then
+    if muted == "true" then
         status = 'muted'
     else
         if level > 66 then
@@ -42,8 +42,8 @@ local volume_widget = wibox.widget {
 
 local update_widget = function(stdout, _, _, _)
     local space = string.find(stdout, ' ')
-    local muted = string.sub(stdout, space + 2, -3)
-    local volume = tonumber(string.sub(stdout, 2, space - 3))
+    local muted = string.sub(stdout, space + 1, -2)
+    local volume = tonumber(string.sub(stdout, 1, space - 1))
     volume_text:set_text(" " .. volume .. "%  ")
     volume_image.image = image_path_make(volume, muted)
 end
